@@ -22,6 +22,6 @@
 #ifndef __PHSORT_H__
 
 extern LINKAGE  int bisect_left(const LOCINT *v, const int num, const LOCINT val);
-extern LINKAGE void psort(LOCINT **u, LOCINT **v, int64_t *n, double rthr, int verbose);
+extern LINKAGE void phsort(LOCINT **u, LOCINT **v, int64_t *n, double rthr, int verbose);
 
 #endif

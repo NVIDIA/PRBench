@@ -53,7 +53,11 @@ using namespace cub;
 #define RXCTA_WP	(1)
 #define RXCTA_TH	(1)
 
+#if __CUDA_ARCH__ >= 350
 #define LDG(x)		(__ldg(&(x)))
+#else
+#define LDG(x)		(x)
+#endif
 
 #define	DIV_UP(a,b)	(((a)+((b)-1))/(b))
 
@@ -584,8 +588,7 @@ size_t ASCIICouple2BinCuda(uint4 *d_data, size_t datalen, LOCINT **d_uout, LOCIN
 			}
 			if (!(j % 10)) printf("\n\t");
 
-			if (sizeof(OFFSTYPE) == 4) printf("%u ", str_off_h[i]);
-			else			   printf("%llu ", str_off_h[i]);
+			printf("%llu ", (unsigned long long)str_off_h[i]);
 
 			j++; 
 			if (j >= 1000) {
@@ -1346,7 +1349,7 @@ void get_csr_multi_cuda(LOCINT *u_d, LOCINT *v_d, int64_t ned,
 		if (nuvuniq > LOCINT_MAX) {
 			int rank;
 			MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-			fprintf(stderr, "Too many nonzeroes for processor %d: %zu!\n", rank, nuvuniq);
+			fprintf(stderr, "Too many nonzeroes for processor %d: %"PRId64"!\n", rank, nuvuniq);
 			exit(EXIT_FAILURE);
 		}
 		nnz[i] = nuvuniq;

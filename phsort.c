@@ -362,7 +362,7 @@ static inline void exchange_vals(LOCINT *sbuf, int *soff, int *snum,
 // Sorts the n elements in u,v among the NP processor in MPI_COMM_WORLD
 // assigning to each processor (n/NP) +- (perc)%. 
 // (Note that in some cases it may assign slightly more elements)
-void psort(LOCINT **u, LOCINT **v, int64_t *n, double perc, int verbose) {
+void phsort(LOCINT **u, LOCINT **v, int64_t *n, double perc, int verbose) {
 
 	int i;
 

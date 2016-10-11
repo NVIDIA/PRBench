@@ -33,7 +33,10 @@
 #include <cuda_runtime.h>
 #include <unistd.h>
 //#include <cuda_profiler_api.h>
+
+#ifndef __APPLE__
 #include <fcntl.h> // for posix_fadvise()
+#endif
 
 #ifdef __cplusplus
 #define __STDC_FORMAT_MACROS 1
@@ -527,11 +530,12 @@ static int64_t freadGraphSOA(const char *fname, int scale, int edgef, LOCINT **u
 	rem = 0;
 	nalloc = 0;
 	edge_max = ((int64_t)N)*edgef;
-
+#ifndef __APPLE__
 	if (avoid_read_cache) {
 		int fd = fileno(fp);
 		posix_fadvise(fd, 0, 0, POSIX_FADV_DONTNEED);
 	}
+#endif
 	while(1) {
 
 		char *q = IOBUF + rem;
@@ -600,11 +604,12 @@ static size_t freadGraphSOA_GCONV(const char *fname, LOCINT **h_u, LOCINT **h_v,
 
 	*rtime = MPI_Wtime();
 	fp = Fopen(fname, "r");
-
+#ifndef __APPLE__
 	if (avoid_read_cache) {
 		int fd = fileno(fp);
 		posix_fadvise(fd, 0, 0, POSIX_FADV_DONTNEED);
 	}
+#endif
 	Fread(h_data, 1, fsize, fp);
 	fclose(fp);
 	*rtime = MPI_Wtime() - *rtime;
@@ -937,7 +942,7 @@ static void kernel1(int scale, int edgef, double rtol, elist_t *eio, int transpo
 	// simple parallel histogram-sort implementation
 	// returns u[] amnd v[] sorted first across u and
 	// then v
-	psort(&u, &v, &ned, 1.0E-2, 0);
+	phsort(&u, &v, &ned, 1.0E-2, 0);
 	MPI_Barrier(MPI_COMM_WORLD);
 	ts = MPI_Wtime()-ts;
 
@@ -1506,7 +1511,11 @@ int main(int argc, char **argv) {
 				usage(argv[0]);
 		}
 	}
-
+#ifdef __APPLE__
+	if (avoid_read_cache) {
+		prexit("Option --no-rcache not supported on Apple MacOSX!\n");
+	}
+#endif
 	if (ginFile && startk != 0) {
 		prexit("Graphs from file (-g option) can only be processed starting from kernel 0 (-k 0).\n"); 
 	}
