@@ -1,0 +1,8 @@
+cub-1.5.1
+generator*
+.*.swp
+*.o
+.nfs*
+prbench
+plots
+Session.vim
