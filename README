@@ -10,9 +10,11 @@ CUDA_HOME
 MPI_HOME
 CUB_HOME
 
-and then you can run 'make' to build the 'prbench' binary.
+and selecting the right GPU architecture by setting the CUDA_ARCH variable
+(currently set to sm_35). 
+At this point you can run 'make' to build the 'prbench' binary.  
 Running 'prbench -h' gives you a list of all the option accepted by the program
-with a brief explanation. An example of run with four processes is:
+with a brief explanation.  An example of run with four processes is:
 
 -------------------------------------------------------------------------------
 $> mpirun -np 4 ./prbench -S 21 -E 16 -f
