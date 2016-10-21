@@ -468,7 +468,7 @@ __device__ const char *str2bin(const char *s, INT_T *v, const char *const base) 
 	INT_T pw=1;
 	
 	*v = 0;
-	while(*s >= '0' && *s <= '9' && s >= base) {
+	while(s >= base && *s >= '0' && *s <= '9') {
 		*v += pw*(*s-- - '0');
 		pw *= 10;
 	}
