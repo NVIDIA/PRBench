@@ -1401,7 +1401,7 @@ static void kernel3_multi(int scale, int edgef, int numIter, REAL c, REAL a, rhs
 int main(int argc, char **argv) {
 
 	int	rank, ntask;
-	char	och;
+	int	och;
 	REAL	c=REAL_MAX, a=REAL_MAX;
 	
 	int	rv;
