@@ -27,7 +27,7 @@ CPP=$(MPI_HOME)/bin/mpic++
 LD=$(MPI_HOME)/bin/mpic++
 
 CUDACC=$(CUDA_HOME)/bin/nvcc
-CUDA_ARCH=-arch=sm_35
+CUDA_ARCH=-arch=sm_60
 CUDACFLAGS=-m64 -c -O3 --ptxas-options=-v -I$(CUB_HOME) -I$(MPI_HOME)/include
 
 CFLAGS=-W -Wall -Wno-unused-function -Wno-unused-parameter -c -O3 -I$(CUDA_HOME)/include -I$(MPI_HOME)/include
