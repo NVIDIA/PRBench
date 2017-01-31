@@ -1800,68 +1800,7 @@ int main(int argc, char **argv) {
 
 	MPI_Barrier(MPI_COMM_WORLD);
 	init_cuda();
-/* UNNEDED		
-	for(int i = 0; i < ntask; i++) {
-		if (i == rank) continue;
-		int access;
-		CHECK_CUDA(cudaDeviceCanAccessPeer(&access, rank, i));
-		if (access) {
-			//CHECK_CUDA(cudaDeviceEnablePeerAccess (i, 0));
-		} else {
-			fprintf(stderr, "[%d] device %d cannot access memory from device %d!\n", rank, i, rank);
-			exit(EXIT_FAILURE);
-		}
-	}
-*/
-/*
-	if (rank == 0) {
 
-		int **test_d = (int **)Malloc(ntask*sizeof(*test_d));
-
-		size_t min_free_bytes = SIZE_MAX;
-		for(int i = 0; i < ntask; i++) {
-
-			//fprintf(stderr, "DEV=%d\n", DEVS[i]); 
-			CHECK_CUDA(cudaSetDevice(i));
-			CHECK_CUDA(cudaMalloc(test_d+i, sizeof(int)));
-			CHECK_CUDA(cudaMemset(test_d[i], i, sizeof(int)));
-
-			size_t free_bytes, total_bytes;
-			CHECK_CUDA(cudaMemGetInfo(&free_bytes, &total_bytes));
-			min_free_bytes = MIN(min_free_bytes, free_bytes);
-
-			fprintf(stdout, "Total/free memory on GPU %d: %zu/%zu\n", i, total_bytes, min_free_bytes);
-
-			// enable peer access
-			for(int j = 0; j < ntask; j++) {
-				if (j == i) continue;
-				int access;
-				CHECK_CUDA(cudaDeviceCanAccessPeer(&access, i, j));
-				if (access) {
-					CHECK_CUDA(cudaDeviceEnablePeerAccess (j, 0));
-				} else {
-					fprintf(stderr, "Device %d cannot access memory from device %d!\n", i, j);
-					//exit(EXIT_FAILURE);
-				}
-			}
-		}
-
-		for(int i = 0; i < ntask; i++) {
-			for(int j = 0; j < ntask; j++) {
-				if (j == i) continue;
-				CHECK_CUDA(cudaMemcpy(test_d[i], test_d[j], sizeof(int), cudaMemcpyDefault));
-			}
-		}
-
-		for(int i = 0; i < ntask; i++) {
-			int x;
-			CHECK_CUDA(cudaMemcpy(&x, test_d[i], sizeof(int), cudaMemcpyDefault));
-			printf("Val from GPU %d: %02X\n", i, x);
-		}
-		CHECK_CUDA(cudaSetDevice(0));
-	}
-	MPI_Barrier(MPI_COMM_WORLD);
-*/
 	spmat_t *m = createSpmat(ntask);
 
 	if (!doIO) {
